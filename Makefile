@@ -2,10 +2,10 @@ CC = g++
 CFLAGS = -Wall -Werror
 
 smol:
-	$(CC) $(CFLAGS) -o smol main.cpp image.cpp line.cpp
+	$(CC) $(CFLAGS) -o smol main.cpp image.cpp model.cpp
 
 run: smol
-	./smol.exe
+	./smol.exe african_head.obj
 
 clean:
 	del *.exe
