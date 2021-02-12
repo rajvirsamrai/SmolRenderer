@@ -5,6 +5,15 @@
 
 #include "model.h"
 
+Vec3::Vec3(){
+    // Nothing to be done
+}
+
+Vec3::Vec3(float x, float y, float z){
+    this->x = x;
+    this->y = y;
+    this->z = z;
+}
 
 /*
 Given a filepath, load the corresponding model data. This load function can

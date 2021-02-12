@@ -14,7 +14,6 @@ Colour::Colour(unsigned char r, unsigned char g, unsigned char b){
     rgb[2] = r;
 }
 
-
 /*
 Init the image property variables and the pixel data array.
 */
@@ -56,16 +55,14 @@ void Image::save(const char *filename){
 
     // HEADER
     char buf[18];
-    memset(buf, 0, 2);                              // No Image ID Field, No colour map
-    memset(buf+2, 2, 1);                            // Data Type 2:Unmapped RGB
-    memset(buf+3, 0, 9);                            // Offsets 3 to 7 are ignored because we don't have a colour map.
-                                                    // 8-9 are X origin, 10-11 are Y origin
+    memset(buf, 0, 18);
+    memset(buf+2, 2, 1);                            // Data Type 2: Unmapped RGB
     memset(buf+12, (width & 0x00FF), 1);            // Lower order bits for width
     memset(buf+13, (width & 0xFF00) / 256, 1);      // Higher order bits for width
     memset(buf+14, (height & 0x00FF), 1);           // Lower order bits for height
     memset(buf+15, (height & 0xFF00) / 256, 1);     // Higher order bits for height
     memset(buf+16, 24, 1);                          // 24 bits per pixel
-    memset(buf+17, 0, 1);                           // Image descriptor
+    //memset(buf+17, 0x20, 1);                        // Image descriptor byte
     output.write(buf, 18);
 
     // PIXELS
