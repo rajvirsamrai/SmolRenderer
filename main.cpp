@@ -9,12 +9,13 @@
 
 extern void line(int x0, int y0, int x1, int y1, Colour &c, Image &i);
 extern void wireframe(Model &obj, Colour &c, Image &img);
+extern void flat_shade_render(Model &obj, Image &img);
 extern void triangle_ls(int x0, int y0, int x1, int y1, int x2, int y2, Colour &c, Image &img);
 extern void triangle_bb(int x0, int y0, int x1, int y1, int x2, int y2, Colour &c, Image &img);
 // TODO: MAKE A GEOMETRY CLASS
 
-const int height = 200;
-const int width = 200;
+const int height = 800;
+const int width = 800;
 
 int main(int argc, char** argv){
     if(argc != 2){
@@ -22,12 +23,40 @@ int main(int argc, char** argv){
     }
 
     Image render(height, width);
-    Colour white(255, 255, 255);
-    Colour red(255,0,0);
+    Model head;
+    head.load(argv[1]);
 
-    triangle_bb(10, 10, 100, 30, 190, 160, white, render);
+    flat_shade_render(head, render);
 
     render.save("test.tga");
+}
+
+void flat_shade_render(Model &obj, Image &img){
+    Face f;
+    Colour c(0, 0, 0);
+
+    for(int i = 0; i < (int) obj.faces.size(); i++){
+        f = obj.faces[i];
+
+        Vec3 v0 = obj.vertices[f.v[0] - 1];
+        Vec3 v1 = obj.vertices[f.v[1] - 1];
+        Vec3 v2 = obj.vertices[f.v[2] - 1];
+
+        int x0 = (v0.x + 1.0) * width/2.0;
+        int y0 = (v0.y + 1.0) * height/2.0;
+
+        int x1 = (v1.x + 1.0) * width/2.0;
+        int y1 = (v1.y + 1.0) * height/2.0;
+
+        int x2 = (v2.x + 1.0) * width/2.0;
+        int y2 = (v2.y + 1.0) * height/2.0;
+
+        for(int i = 0; i < 3; i++){
+            c.rgb[i] = rand()%255;
+        }
+
+        triangle_bb(x0, y0, x1, y1, x2, y2, c, img);
+    }
 }
 
 Vec3 cross(float Vx, float Vy, float Vz, float Wx, float Wy, float Wz){
